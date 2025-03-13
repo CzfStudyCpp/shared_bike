@@ -13,6 +13,9 @@ INCLUDE_DIRECTORIES(../../third/include)
 
 #需要连接的库文件
 LINK_DIRECTORIES(../../third/lib/iniparser)
+LINK_DIRECTORIES(../../third/lib/log4cpp)
 
 TARGET_LINK_LIBRARIES(common iniparser)
+TARGET_LINK_LIBRARIES(common log4cpp)
+TARGET_LINK_LIBRARIES(common pthread)
 TARGET_LINK_LIBRARIES(common dl)

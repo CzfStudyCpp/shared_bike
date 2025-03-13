@@ -9,7 +9,7 @@ public:
   Iniconfig();
   ~Iniconfig(); 
   bool loadFile(const std::string &path);
-  const st_env_config &getConfig();  
+  const st_env_config &getConfig(){return _config;};  
 
 private:
 

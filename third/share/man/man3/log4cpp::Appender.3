@@ -1,0 +1,284 @@
+.TH "log4cpp::Appender" 3 "Thu Mar 13 2025" "Version 1.1" "log4cpp" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+log4cpp::Appender \- Implement this interface for your own strategies for printing log statements\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Appender\&.hh>\fP
+.PP
+Inherited by \fBlog4cpp::AppenderSkeleton\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBAppenderMapStorage\fP"
+.br
+.ti -1c
+.RI "class \fBAppenderMapStorageInitializer\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~Appender\fP ()"
+.br
+.RI "Destructor for \fBAppender\fP\&. "
+.ti -1c
+.RI "virtual void \fBdoAppend\fP (const \fBLoggingEvent\fP &event)=0"
+.br
+.RI "Log in \fBAppender\fP specific way\&. "
+.ti -1c
+.RI "virtual bool \fBreopen\fP ()=0"
+.br
+.RI "Reopens the output destination of this \fBAppender\fP, e\&.g\&. "
+.ti -1c
+.RI "virtual void \fBclose\fP ()=0"
+.br
+.RI "Release any resources allocated within the appender such as file handles, network connections, etc\&. "
+.ti -1c
+.RI "virtual bool \fBrequiresLayout\fP () const =0"
+.br
+.RI "Check if the appender uses a layout\&. "
+.ti -1c
+.RI "virtual void \fBsetLayout\fP (\fBLayout\fP *layout)=0"
+.br
+.RI "Set the \fBLayout\fP for this appender\&. "
+.ti -1c
+.RI "const std::string & \fBgetName\fP () const"
+.br
+.RI "Get the name of this appender\&. "
+.ti -1c
+.RI "virtual void \fBsetThreshold\fP (\fBPriority::Value\fP priority)=0"
+.br
+.RI "Set the threshold priority of this \fBAppender\fP\&. "
+.ti -1c
+.RI "virtual \fBPriority::Value\fP \fBgetThreshold\fP ()=0"
+.br
+.RI "Get the threshold priority of this \fBAppender\fP\&. "
+.ti -1c
+.RI "virtual void \fBsetFilter\fP (\fBFilter\fP *filter)=0"
+.br
+.RI "Set a \fBFilter\fP for this appender\&. "
+.ti -1c
+.RI "virtual \fBFilter\fP * \fBgetFilter\fP ()=0"
+.br
+.RI "Get the \fBFilter\fP for this appender\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAppender\fP * \fBgetAppender\fP (const std::string &name)"
+.br
+.RI "Get a pointer to an exitsing \fBAppender\fP\&. "
+.ti -1c
+.RI "static bool \fBreopenAll\fP ()"
+.br
+.RI "Call \fBreopen()\fP on all existing Appenders\&. "
+.ti -1c
+.RI "static void \fBcloseAll\fP ()"
+.br
+.RI "Call \fBreopen()\fP on all existing Appenders\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAppender\fP (const std::string &name)"
+.br
+.RI "Constructor for \fBAppender\fP\&. "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBCategory\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implement this interface for your own strategies for printing log statements\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "log4cpp::Appender::Appender (const std::string & name)\fC [protected]\fP"
+
+.PP
+Constructor for \fBAppender\fP\&. Will only be used in \fBgetAppender()\fP (and in derived classes of course)\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of this \fBAppender\fP\&. 
+.RE
+.PP
+
+.SS "log4cpp::Appender::~Appender ()\fC [virtual]\fP"
+
+.PP
+Destructor for \fBAppender\fP\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void log4cpp::Appender::close ()\fC [pure virtual]\fP"
+
+.PP
+Release any resources allocated within the appender such as file handles, network connections, etc\&. 
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP, \fBlog4cpp::Win32DebugAppender\fP, \fBlog4cpp::SyslogAppender\fP, \fBlog4cpp::StringQueueAppender\fP, \fBlog4cpp::RemoteSyslogAppender\fP, \fBlog4cpp::OstreamAppender\fP, \fBlog4cpp::NTEventLogAppender\fP, \fBlog4cpp::IdsaAppender\fP, \fBlog4cpp::FileAppender\fP, \fBlog4cpp::BufferingAppender\fP, and \fBlog4cpp::AbortAppender\fP\&.
+.SS "void log4cpp::Appender::closeAll ()\fC [static]\fP"
+
+.PP
+Call \fBreopen()\fP on all existing Appenders\&. 
+.PP
+\fBReturns\fP
+.RS 4
+true if all Appenders returned true on their \fBreopen()\fP call\&. 
+.RE
+.PP
+
+.SS "virtual void log4cpp::Appender::doAppend (const \fBLoggingEvent\fP & event)\fC [pure virtual]\fP"
+
+.PP
+Log in \fBAppender\fP specific way\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIevent\fP The \fBLoggingEvent\fP to log\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP\&.
+.SS "\fBAppender\fP * log4cpp::Appender::getAppender (const std::string & name)\fC [static]\fP"
+
+.PP
+Get a pointer to an exitsing \fBAppender\fP\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP The name of the \fBAppender\fP to return\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+a pointer to an existing \fBAppender\fP, or NULL if no appender with the specfied name exists\&. 
+.RE
+.PP
+
+.SS "virtual \fBFilter\fP* log4cpp::Appender::getFilter ()\fC [pure virtual]\fP"
+
+.PP
+Get the \fBFilter\fP for this appender\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the filter, or NULL if no filter has been set\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP\&.
+.SS "const std::string& log4cpp::Appender::getName () const\fC [inline]\fP"
+
+.PP
+Get the name of this appender\&. The name identifies the appender\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the name of the appender\&. 
+.RE
+.PP
+
+.SS "virtual \fBPriority::Value\fP log4cpp::Appender::getThreshold ()\fC [pure virtual]\fP"
+
+.PP
+Get the threshold priority of this \fBAppender\fP\&. 
+.PP
+\fBReturns\fP
+.RS 4
+the threshold 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP\&.
+.SS "virtual bool log4cpp::Appender::reopen ()\fC [pure virtual]\fP"
+
+.PP
+Reopens the output destination of this \fBAppender\fP, e\&.g\&. the logfile or TCP socket\&. 
+.PP
+\fBReturns\fP
+.RS 4
+false if an error occured during reopening, true otherwise\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::SyslogAppender\fP, \fBlog4cpp::StringQueueAppender\fP, \fBlog4cpp::RemoteSyslogAppender\fP, \fBlog4cpp::OstreamAppender\fP, \fBlog4cpp::NTEventLogAppender\fP, \fBlog4cpp::IdsaAppender\fP, \fBlog4cpp::FileAppender\fP, \fBlog4cpp::AppenderSkeleton\fP, and \fBlog4cpp::AbortAppender\fP\&.
+.SS "bool log4cpp::Appender::reopenAll ()\fC [static]\fP"
+
+.PP
+Call \fBreopen()\fP on all existing Appenders\&. 
+.PP
+\fBReturns\fP
+.RS 4
+true if all Appenders returned true on their \fBreopen()\fP call\&. 
+.RE
+.PP
+
+.SS "virtual bool log4cpp::Appender::requiresLayout () const\fC [pure virtual]\fP"
+
+.PP
+Check if the appender uses a layout\&. 
+.PP
+\fBReturns\fP
+.RS 4
+true if the appender implementation requires a layout\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP, \fBlog4cpp::NTEventLogAppender\fP, \fBlog4cpp::LayoutAppender\fP, \fBlog4cpp::IdsaAppender\fP, and \fBlog4cpp::AbortAppender\fP\&.
+.SS "virtual void log4cpp::Appender::setFilter (\fBFilter\fP * filter)\fC [pure virtual]\fP"
+
+.PP
+Set a \fBFilter\fP for this appender\&. 
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP\&.
+.SS "virtual void log4cpp::Appender::setLayout (\fBLayout\fP * layout)\fC [pure virtual]\fP"
+
+.PP
+Set the \fBLayout\fP for this appender\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlayout\fP The layout to use\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::LayoutAppender\fP, \fBlog4cpp::AppenderSkeleton\fP, \fBlog4cpp::NTEventLogAppender\fP, \fBlog4cpp::IdsaAppender\fP, and \fBlog4cpp::AbortAppender\fP\&.
+.SS "virtual void log4cpp::Appender::setThreshold (\fBPriority::Value\fP priority)\fC [pure virtual]\fP"
+
+.PP
+Set the threshold priority of this \fBAppender\fP\&. The \fBAppender\fP will not appender LoggingEvents with a priority lower than the threshold\&. Use \fBPriority::NOTSET\fP to disable threshold checking\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpriority\fP The priority to set\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlog4cpp::AppenderSkeleton\fP\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBCategory\fP\fC [friend]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for log4cpp from the source code\&.
