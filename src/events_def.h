@@ -32,7 +32,7 @@ public:
 	{
 		msg_.set_rescode(resCode);  //代号
 		msg_.set_vercode(verCode);//验证码
-		msg_.set_data(getReasonByErrorCode(resCode));
+		msg_.set_data(getReasonByErrorCode(resCode)); //失败原因
 	}
 
 	const i32 get_resCode() { return msg_.rescode(); };

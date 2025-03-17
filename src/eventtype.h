@@ -2,7 +2,7 @@
 #define BRKS_COMMON_ENENT_TYPE_H_
 
 #include "glo_def.h"
-//事件类型
+//错误代码以及对应的错误原因
 typedef struct EErrorReason_		
 {
 	i32 code;
@@ -86,6 +86,7 @@ enum EErrorCode
 
 };
 
+//根据code查询错误原因
 const char* getReasonByErrorCode(i32 code);
 
 #endif // !BRKS_COMMON_ENENT_TYPE_H_

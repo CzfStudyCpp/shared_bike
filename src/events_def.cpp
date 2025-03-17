@@ -9,12 +9,21 @@ std::ostream& MobileCodeReqEv::dump(std::ostream& out) const
 	return out;
 }
 
-std::ostream & MobileCodeRspEv::dump(std::ostream & out) const
+//std::ostream & MobileCodeRspEv::dump(std::ostream & out) const
+//{
+//	out << "MobileCodeRspEv sn" << get_sn() << ",";
+//	out << "rescode=" << msg_.rescode() << std::endl;
+//	out << "vercode=" << msg_.vercode() << std::endl;
+//	out << "describel=" << msg_.data() << std::endl;
+//	return out;
+//}
+
+std::ostream& MobileCodeRspEv::dump(std::ostream& out)const
 {
 	out << "MobileCodeRspEv sn" << get_sn() << ",";
 	out << "rescode=" << msg_.rescode() << std::endl;
 	out << "vercode=" << msg_.vercode() << std::endl;
-	out << "describel=" << msg_.data() << std::endl;
+    out << "describel=" << msg_.data() << std::endl;
 	return out;
 }
 
