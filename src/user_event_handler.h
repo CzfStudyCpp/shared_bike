@@ -7,7 +7,7 @@
 #include "threadpool/thread.h"
 
 #include <map>
-//用户事件处理器类
+
 class UserEventHandler : public iEventHandler
 {
 public:
@@ -17,13 +17,13 @@ public:
 
 private:
 	
-	MobileCodeRspEv* handle_mobile_code_req(MobileCodeReqEv* ev);//处理用户请求
-	RegisterResEv* handle_user_register_req(RegisterReqEv* ev);//处理注册请求
+	MobileCodeRspEv* handle_mobile_code_req(MobileCodeReqEv* ev);
+	RegisterResEv* handle_user_register_req(RegisterReqEv* ev);
 	AddBikeResEv* handle_addBike_req(AddBikeReqEv* ev);
 	DeleteBikeResEv* handle_deleteBike_req(DeleteBikeReqEv* ev);
-	i32 code_gen();//产生验证码
+	i32 code_gen();
 	LoginResEv* handle_login_req(LoginReqEv* ev);
-	bikeScanQRStartResponseEv* handle_bike_scanQRSatrt_req(bikeScanQRStartReqEv* ev);//二维码扫描
+	bikeScanQRStartResponseEv* handle_bike_scanQRSatrt_req(bikeScanQRStartReqEv* ev);
 	bikeScanQREndResponseEv* handle_bike_scanQREnd_req(bikeScanQREndReqEv* ev);
 	bikeScanQRFaultResponseEv* handle_bike_scanQRFault_req(bikeScanQRFaultReqEv* ev);
 	bikeScanQRRepairFinishResponseEv* handle_bike_scanQRRepairFinish_req(bikeScanQRRepairFinishReqEv* ev);
@@ -34,7 +34,7 @@ private:
 	
 private:
 	//std::string mobile_;
-	std::map<std::string, i32> m2c_;  //first is userName, second is code
+	std::map<std::string, i32> m2c_;  //first is mobile, second is code
 	pthread_mutex_t pm_;
 };
 

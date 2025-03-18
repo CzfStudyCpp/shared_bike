@@ -5,13 +5,11 @@
 
 
 
-DispatchMsgService* DispatchMsgService::DMS_ = nullptr; //
+DispatchMsgService* DispatchMsgService::DMS_ = nullptr;
 int DispatchMsgService::clientNumber = 0;
 std::forward_list<struct bufferevent*> DispatchMsgService::m_userList;
 std::queue<iEvent *> DispatchMsgService::response_events;
-
 pthread_mutex_t DispatchMsgService::queue_mutext;
-
 NetworkInterface* DispatchMsgService::NTIF_ = nullptr;
 
 DispatchMsgService::DispatchMsgService():tp(nullptr)
@@ -53,11 +51,22 @@ void DispatchMsgService::close()
 
 void DispatchMsgService::subscribe(u32 eid, iEventHandler * handler)
 {
-	LOG_DEBUG("DispatchMsgService::subscribe eid:%d\n", eid);
+	//LOG_DEBUG("DispatchMsgService::subscribe eid:%d\n", eid);
 	T_EventHandlersMap::iterator iter = subscribers_.find(eid);
+	/*map<string, int> m_stlmap;
+	m_stlmap[“xiaomi”] = 88;]
+
+	auto mpit = m_stlmap.begin();
+	first会得到Map中key的有效值，
+	second会得到Map中value的有效值。
+
+	所以
+	mpit ->first; // 得到是 string 值是 “xiaomi”
+	mpit ->second; //得到是 int 值是 88*/
+	/*find 算法会返回一个指向被找到对象的迭代器，如果没有找到对象，会返回这个序列的结束迭代器*/
 	if (iter != subscribers_.end())
 	{
-		//检查是否已经存在处理器
+		
 		T_EventHandlers::iterator hdl_iter = std::find(iter->second.begin(), iter->second.end(), handler);
 		if (hdl_iter == iter->second.end())
 		{
@@ -175,7 +184,7 @@ DispatchMsgService * DispatchMsgService::getInstance()
 {
 	if (DMS_ == nullptr)
 	{
-		DMS_ = new DispatchMsgService();//懒汉式单例
+		DMS_ = new DispatchMsgService();
 		
 	}
 	return DMS_;

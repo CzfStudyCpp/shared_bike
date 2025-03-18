@@ -2,7 +2,7 @@
 #define NS_IEVENT_HANDLER_H_
 #include "ievent.h"
 #include "eventtype.h"
-//事件处理类
+
 class iEventHandler
 {
 public:

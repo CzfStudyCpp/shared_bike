@@ -28,7 +28,7 @@ protected:
 public:
 	virtual ~DispatchMsgService();
 
-	virtual BOOL open();//打开服务，线程池在此创建
+	virtual BOOL open();
 	virtual void close();
 
 	virtual void subscribe(u32 eid, iEventHandler* handler);
@@ -37,7 +37,7 @@ public:
 	//把事件投递到线程池中进行处理
 	virtual i32 enqueue(iEvent* ev);
 
-	//线程池回调函数,C语言的线程池，回调C++方法，定义成静态因为C++，会传递this指针这样会导致错误
+	//线程池回调函数
 	static void svc(void* argv);
 
 	//对具体的事件进行分发处理
@@ -58,17 +58,17 @@ public:
 protected:
 	thread_pool_t* tp;
 
-	static DispatchMsgService* DMS_;//单例
+	static DispatchMsgService* DMS_;
 	static int clientNumber;
 	static std::forward_list<struct bufferevent*> m_userList;
 	
 	typedef std::vector<iEventHandler*> T_EventHandlers;//用户事件管理容器
-	typedef std::map<u32, T_EventHandlers> T_EventHandlersMap;//事件对应的处理器，一个事件可能有多个处理器
-	T_EventHandlersMap subscribers_;   //订阅者
+	typedef std::map<u32, T_EventHandlers> T_EventHandlersMap;
+	T_EventHandlersMap subscribers_;
 	
 	bool svr_exit_;
 
-	static std::queue<iEvent *> response_events;//响应事件dui'li
+	static std::queue<iEvent *> response_events;
 	static pthread_mutex_t queue_mutext;
 	static NetworkInterface* NTIF_;
 };
