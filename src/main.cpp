@@ -93,11 +93,12 @@ int main(int argc, char **argv)
 	NTIF->start(conf_args.svr_port);
 	LOG_DEBUG("等待客户端的连接.......\n\n");
 	printf("等待客户端的连接.......\n\n");
+	//可编写一个client 使用bufferEvent，libEvent写入数据到对应的套接字中，并提供交互写入操作，支持用户写入信息进行连接测试
 	while (1)
 	{
 		NTIF->network_event_dispatch();
 		//sleep(10);
-		//LOG_DEBUG("network_event_dispatch.......\n\n");
+		LOG_DEBUG("network_event_dispatch.......\n\n");
 	}
 	
 	return 0;

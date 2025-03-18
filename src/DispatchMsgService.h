@@ -68,7 +68,7 @@ protected:
 	
 	bool svr_exit_;
 
-	static std::queue<iEvent *> response_events;
+	static std::queue<iEvent *> response_events;//响应事件dui'li
 	static pthread_mutex_t queue_mutext;
 	static NetworkInterface* NTIF_;
 };
