@@ -3,7 +3,7 @@
 
 MysqlConnection::MysqlConnection(): mysql_(NULL)
 {
-	mysql_ = (MYSQL*)malloc(sizeof(MYSQL));
+	mysql_ = (MYSQL*)malloc(sizeof(MYSQL));//MYSQL是C语言版本实现
 }
 
 MysqlConnection::~MysqlConnection()
@@ -26,11 +26,12 @@ bool MysqlConnection::Init(const char * szHost, int nPort, const char * szUser, 
 		return false;
 	}
 	char cAuto = 1;
+	//连接选项
 	if (mysql_options(mysql_, mysql_option::MYSQL_OPT_RECONNECT, &cAuto) != 0)
 	{
 		LOG_ERROR("mysql_options MYSQL_OPT_RECONNECT failed ");
 	}
-
+	//连接
 	if (mysql_real_connect(mysql_, szHost, szUser, szPasswd, szDb, nPort, NULL, 0) == NULL)
 	{
 		LOG_ERROR("connect mysql failed %s, %d", this->GetErrInfo(), errno);
@@ -57,6 +58,7 @@ bool MysqlConnection::Execute(const char * szSql)
 	
 	if (mysql_real_query(mysql_, szSql, strlen(szSql)) != 0)//
 	{
+		//连接断掉的标识
 		if (mysql_errno(mysql_) == CR_SERVER_GONE_ERROR)
 		{			
 			Reconnect();

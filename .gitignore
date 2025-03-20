@@ -18,7 +18,9 @@ Makefile
 *.lib
 *.exe
 *.bin
-
+*.[^.]
+src/*
+!src/*.*
 # 忽略第三方库的构建文件（如果是动态生成的）
 /third/*/build/
 /third/*/CMakeFiles/

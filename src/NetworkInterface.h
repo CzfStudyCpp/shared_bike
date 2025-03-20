@@ -41,7 +41,7 @@ typedef struct _ConnectSession {
 	i32 eid;	//保存当前请求的事件id
 	i32 fd;		//保存当前传送的文件句柄
 
-	struct bufferevent* bev;//缓冲区
+	struct bufferevent* bev;//事件缓冲区
 	u32 message_len;        //已经读写消息的长度
 	u32 read_message_len;   //已经读取的消息长度
 	

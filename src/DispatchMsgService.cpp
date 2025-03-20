@@ -5,11 +5,13 @@
 
 
 
-DispatchMsgService* DispatchMsgService::DMS_ = nullptr;
+DispatchMsgService* DispatchMsgService::DMS_ = nullptr; //
 int DispatchMsgService::clientNumber = 0;
 std::forward_list<struct bufferevent*> DispatchMsgService::m_userList;
 std::queue<iEvent *> DispatchMsgService::response_events;
+
 pthread_mutex_t DispatchMsgService::queue_mutext;
+
 NetworkInterface* DispatchMsgService::NTIF_ = nullptr;
 
 DispatchMsgService::DispatchMsgService():tp(nullptr)
@@ -29,11 +31,13 @@ BOOL DispatchMsgService::open()
 
 	thread_mutex_create(&queue_mutext);
 	LOG_DEBUG("线程池初始化......");
+
 	//printf("线程池初始化......\n");
 	tp = thread_pool_init();
 	LOG_DEBUG("当前线程池中的线程数为：tp->threads=%d", tp->threads);
 	LOG_DEBUG("线程池能处理的最大任务数为：tp->max_queue=%d", tp->max_queue);
 	LOG_DEBUG("线程池初始化成功！");
+
 	//printf("线程池初始化成功！\n");
 	return tp ? TURE : FALSE;
 }
@@ -51,22 +55,11 @@ void DispatchMsgService::close()
 
 void DispatchMsgService::subscribe(u32 eid, iEventHandler * handler)
 {
-	//LOG_DEBUG("DispatchMsgService::subscribe eid:%d\n", eid);
+	LOG_DEBUG("DispatchMsgService::subscribe eid:%d\n", eid);
 	T_EventHandlersMap::iterator iter = subscribers_.find(eid);
-	/*map<string, int> m_stlmap;
-	m_stlmap[“xiaomi”] = 88;]
-
-	auto mpit = m_stlmap.begin();
-	first会得到Map中key的有效值，
-	second会得到Map中value的有效值。
-
-	所以
-	mpit ->first; // 得到是 string 值是 “xiaomi”
-	mpit ->second; //得到是 int 值是 88*/
-	/*find 算法会返回一个指向被找到对象的迭代器，如果没有找到对象，会返回这个序列的结束迭代器*/
 	if (iter != subscribers_.end())
 	{
-		
+		//检查是否已经存在处理器
 		T_EventHandlers::iterator hdl_iter = std::find(iter->second.begin(), iter->second.end(), handler);
 		if (hdl_iter == iter->second.end())
 		{
@@ -101,7 +94,9 @@ i32 DispatchMsgService::enqueue(iEvent * ev)
 	}
 	ConnectSession* cs = (ConnectSession*)ev->get_args();
 	LOG_DEBUG("将客户端[%s][%p]请求[%d]投递到任务队列中.......", cs->remote_ip, cs->bev, cs->eid);
+	printf("将客户端[%s][%p]请求[%d]投递到任务队列中.......\n", cs->remote_ip, cs->bev, cs->eid);
 	thread_task_t* task = thread_task_alloc(0);
+	//设置任务的处理器以及上下文
 	task->handler = DispatchMsgService::svc;
 	task->ctx = ev;
 
@@ -123,8 +118,8 @@ void DispatchMsgService::svc(void * argv)
 		iEvent* rsp = dms->process(ev);
 		if (rsp)
 		{
-			rsp->dump(std::cout);
-			rsp->set_args(ev->get_args());
+			rsp->dump(std::cout);//输出打印调试
+			rsp->set_args(ev->get_args());//获取事件的会话状态
 			
 		}
 		else
@@ -155,6 +150,7 @@ iEvent* DispatchMsgService::process(const iEvent * ev)
 	u32 eid = ev->get_eid();
 	LOG_DEBUG("DispatchMsgService::process-eid: %u\n", eid);
 	//printf("DispatchMsgService::process-eid: %u\n", eid);
+	//未知事件
 	if (eid == EEVNETID_UNKOWN)
 	{
 		LOG_WARN("DispatchMsgService: unknow event id %d\n", eid);
@@ -162,6 +158,7 @@ iEvent* DispatchMsgService::process(const iEvent * ev)
 		return nullptr;
 	}
 	T_EventHandlersMap::iterator handlers = subscribers_.find(eid);
+	//没有处理器方法
 	if (handlers == subscribers_.end())
 	{
 		LOG_WARN("DispatchMsgService：no any event handler subscribed: %d\n", eid);
@@ -184,7 +181,7 @@ DispatchMsgService * DispatchMsgService::getInstance()
 {
 	if (DMS_ == nullptr)
 	{
-		DMS_ = new DispatchMsgService();
+		DMS_ = new DispatchMsgService();//懒汉式单例
 		
 	}
 	return DMS_;
@@ -291,12 +288,15 @@ iEvent * DispatchMsgService::parseEvent(const char * message, u32 len, i32 eid)
 		{
 			LOG_DEBUG("客户端正在尝试登陆......");
 			LOG_DEBUG("正在从客户端序列化的massage中解析数据.......");
+			printf("客户端正在尝试登陆......\n");
+			printf("正在从客户端序列化的massage中解析数据.......\n");
 			tutorial::login_request lr;
 			//调试这里粗问题
 			//lr.set_icode(eid);
 			if (lr.ParseFromArray(message, len))
 			{
 				LOG_DEBUG("解析数据完成.客户端用户名为：%s， 密码为：%s", lr.username().c_str(), lr.userpwd().c_str());
+				printf("解析数据完成.客户端用户名为：%s， 密码为：%s\n", lr.username().c_str(), lr.userpwd().c_str());
 				LoginReqEv* ev = new LoginReqEv(lr.username(), lr.userpwd());
 				return ev;
 			}
@@ -563,7 +563,7 @@ void DispatchMsgService::sendPesponseMessage(iEvent* ev, EventID Eid, NetworkInt
 	LOG_DEBUG("正在序列化数据......");
 	ev->SerializeToArray(cs->write_buf + MESSAGE_HEADER_LEN, cs->message_len);
 	
-	//printf("!!!!!!!!!!!!sendPesponseMessage--cs->write_buf:%s\n", cs->write_buf);
+	printf("!!!!!!!!!!!!sendPesponseMessage--cs->write_buf:%s\n", cs->write_buf);
 
 	interface->send_response_message(cs);
 }

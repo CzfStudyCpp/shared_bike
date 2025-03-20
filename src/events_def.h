@@ -265,6 +265,7 @@ message list_account_records_response
 	repeated account_record records = 3;
 }
 */
+//账户记录响应列表
 class ListAccountRecordsResonseEv : public iEvent
 {
 public:

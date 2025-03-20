@@ -12,7 +12,15 @@ public:
 
 	}
 	//~SqlTables();
-
+	/*表名	userinfo
+字段名	类型	是否为空	默认值	主、外键	备注
+id	int(16)	NOT	1,自增长	PK	用户id
+username	varchar(128)	NOT			用户名：英文字符、数字和特殊符号的组合
+mobile	varchar(16)	NOT	‘13000000000’		
+registertm	timestamp	NOT	当前时间		注册时间
+money	int(4)	NOT	0		账户余额
+mobile_index(mobile)	index		索引
+*/
 	bool CreateUserInfo()
 	{
 		LOG_DEBUG("正在创建用户信息表......");
@@ -36,7 +44,7 @@ public:
 
 		//创建一个管理员账户
 		char sql_content[1024];
-		sprintf(sql_content, "SELECT username FROM userinfo where username='qiniubike' and userpassword='qiniubike'");
+		sprintf(sql_content, "SELECT username FROM userinfo where username='czf' and userpassword='czf'");
 		SqlRecordSet record_set;
 		;
 		if (!sqlconn_->Execute(sql_content, record_set))
@@ -50,7 +58,7 @@ public:
 		if (mysql_fetch_row(res) == NULL)
 		{
 			memset(sql_content, '\0', sizeof(sql_content));
-			sprintf(sql_content, "INSERT INTO userinfo(username, userpassword) VALUES('qiniubike', 'qiniubike')");
+			sprintf(sql_content, "INSERT INTO userinfo(username, userpassword) VALUES('czf', 'czf')");
 			if (!sqlconn_->Execute(sql_content))
 			{
 				LOG_DEBUG("管理员信息插入失败！错误原因[%s]", sqlconn_->GetErrInfo());
@@ -90,7 +98,21 @@ public:
 		LOG_DEBUG("用户使用单车记录信息表创建成功！");
 		return true;
 	}
-
+	/*表名	bikeinfo
+		字段名	类型	是否为空	默认值	主、外键	备注
+		id	int	NOT	自增长	PK	单车id
+		devno	int	NOT			单车编号
+		status	tinyint(1)	NOT	0		单车状态 
+		0 - 停止
+		1 - 骑行中
+		2 - 损坏
+		3 - 维修中
+		trouble	int	NOT	0		损坏类型编号
+		tmsg	varchar(256)	NOT	‘’		损坏原因描述
+		latitude	double(10,6)	NOT	0		维度
+		longitude	double(10,6)	NOT	0		经度
+		unique(devno)	唯一约束
+*/
 	bool CreateBikeTable()
 	{
 		LOG_DEBUG("正在创建单车信息表......");

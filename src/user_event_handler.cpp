@@ -278,8 +278,10 @@ LoginResEv * UserEventHandler::handle_login_req(LoginReqEv * ev)
 	std::string userPwd = ev->get_userPwd();
 
 	std::shared_ptr<MysqlConnection> mysqlconn(new MysqlConnection);
+
 	_st_env_config conf_args = Iniconfig::getInstance()->getconfig();
 	LOG_DEBUG("正在打开数据库.....");
+
 	if (!mysqlconn->Init(conf_args.db_ip.c_str(), conf_args.db_port, conf_args.db_user.c_str(),
 		conf_args.db_pwd.c_str(), conf_args.db_name.c_str()))
 	{
@@ -294,7 +296,7 @@ LoginResEv * UserEventHandler::handle_login_req(LoginReqEv * ev)
 		LOG_DEBUG("用户账号[%s]和密码[%s]信息匹配失败!\n", userName.c_str(), userPwd.c_str());
 		return new LoginResEv(userName, userPwd, 0, ERRC_INVALID_MSG);;
 	}	
-	if (userName == "qiniubike" && userPwd == "qiniubike") {
+	if (userName == "czf" && userPwd == "czf") {
 		LOG_DEBUG("管理员[%s]已登录!\n", userName.c_str());
 		return new LoginResEv(userName, userPwd, 1, ERRC_SUCCESS);;
 	}
@@ -324,6 +326,7 @@ bikeScanQRStartResponseEv* UserEventHandler::handle_bike_scanQRSatrt_req(bikeSca
 	
 	char sql_content_ride_record[1024];
 	char sql_content_updataBikeinfo[1024];
+
 	sprintf(sql_content_updataBikeinfo, "UPDATE bikeinfo SET status=%d, tmsg = 'bike ride start, riding......', \ 
 		time = FROM_UNIXTIME(%d, '%%Y-%%m-%%d %%H:%%i:%%S'), bike_point = GeomFromText('POINT(%lf %lf)') WHERE devno = %d",
 		BIKE_RIDE_START, ev->get_timestamp(), ev->get_longitude(), ev->get_latitude(), ev->get_bikeId());
@@ -460,7 +463,7 @@ bikeScanQRRepairFinishResponseEv* UserEventHandler::handle_bike_scanQRRepairFini
 
 	if (!us.insertUseRideRecord(sql_content_ride_record))
 	{
-		LOG_DEBUG("插入用户记录表user_ride_record_info失败！错误信息：%s", mysqlconn->GetErrInfo());
+		LOG_DEBUG("插入用户骑行记录表user_ride_record_info失败！错误信息：%s", mysqlconn->GetErrInfo());
 		return new bikeScanQRRepairFinishResponseEv(ERRO_PROCCESS_FALED);
 	}
 
